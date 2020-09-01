@@ -1,0 +1,38 @@
+activity2 <- activity
+nas <- is.na(activity2$steps)
+avg_interval <- tapply(activity2$steps, activity2$interval, mean, na.rm=TRUE, simplify = TRUE)
+activity2$steps[nas] <- avg_interval[as.character(activity2$interval[nas])]
+names(activity2)
+## [1] "steps"    "date"     "interval"
+## Check for no-NA
+sum(is.na(activity2))
+## [1] 0
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+#Plotting
+#Setting up the pannel for one row and two columns
+par(mfrow=c(1,2))
+
+## Similar analysis without NAs now
+totalstepsperday2 <- aggregate(steps ~ date, data = activity2, FUN = sum, na.rm = TRUE)
+head(totalstepsperday2)
+##         date    steps
+## 1 2012-10-01 10766.19
+## 2 2012-10-02   126.00
+## 3 2012-10-03 11352.00
+## 4 2012-10-04 12116.00
+## 5 2012-10-05 13294.00
+## 6 2012-10-06 15420.00
+## Histogram without the NA values
+hist(totalstepsperday2$steps, 
+    main = "Total Steps per Day (no-NA)", 
+    xlab = "Number of Steps per Day", 
+    ylab = "Interval",
+    col="green",
+    breaks=50)
+##Histogram with the orginal dataset
+hist(totalstepsperday$steps, 
+    main="Total Steps per Day (Original)", 
+    xlab="Number of Steps per Day", 
+    ylab = "Interval",
+    col="orange",
+    breaks=50)
